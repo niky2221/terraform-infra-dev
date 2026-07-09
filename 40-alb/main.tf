@@ -16,3 +16,31 @@ module "alb" {
     }
   )
 }
+
+resource "aws_lb_listener" "http" {
+  load_balancer_arn = module.alb.arn
+  port              = "80"
+  protocol          = "HTTP"
+
+ default_action {
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/html"
+      message_body = "<h1>Hello, I am from backend APP ALB</h1>"
+      status_code  = "200"
+    }
+  }
+}
+
+resource "aws_route53_record" "alb_record" {
+  zone_id = var.zone_id
+  name    = "*.app-dev.${var.domain_name}"
+  type    = "A"
+
+  alias {
+    name                   = module.alb.dns_name
+    zone_id                = module.alb.zone_id # Use the same hosted zone ID
+    evaluate_target_health = false
+  }
+}
