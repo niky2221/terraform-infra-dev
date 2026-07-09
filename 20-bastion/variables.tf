@@ -12,7 +12,7 @@ variable "common_tags" {
     default = {
         project_name = "expense"
         environment = "dev"
-        description = "created for instances"
+        description = "load balancer for bastion pub ip"
     }
   
 }

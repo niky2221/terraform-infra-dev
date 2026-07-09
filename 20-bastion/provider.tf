@@ -1,0 +1,20 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.49.0"
+    }
+  }
+  backend "s3" {
+    bucket = "expense-tf-state"
+    key    = "expense-bastion-dev-key" #you shold unique key name in bucket, same key should not be used in repos or another any files
+    region = "us-east-1"
+    dynamodb_table = "expense-tf-state-locking"
+    use_lockfile = true
+  }
+}
+
+provider "aws" {
+  # Configuration options
+  region = "us-east-1"
+}
