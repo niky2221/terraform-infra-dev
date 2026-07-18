@@ -4,14 +4,15 @@ module "db" {
   identifier = "${var.project}-${var.environment}-mysql"
 
   engine            = "mysql"
-  engine_version    = "8.0.40"
+  engine_version    = "8.4.9"
   instance_class    = "db.t4g.micro"
   allocated_storage = 20
 
   db_name  = "transactions"  #schema name, it creates automatically
   username = "root"
-  password = ExpenseApp1
   port     = "3306"
+  password_wo = var.db_password
+  password_wo_version = 1
   manage_master_user_password = false
 
 
@@ -23,10 +24,10 @@ module "db" {
   db_subnet_group_name             = local.database_subnet_group_name
 
   # DB parameter group
-  family = "mysql8.0"
+  family = "mysql8.4"
 
   # DB option group
-  major_engine_version = "8.0"
+  major_engine_version = "8.4"
 
   # Database Deletion Protection
   deletion_protection = false
@@ -63,13 +64,16 @@ module "db" {
     var.common_tags,
     {
     Name = "${var.project}-${var.environment}-mysql"
-  }
+    }
+  )
 }
 
 
-resource "aws_route53_record" "mysql"
+resource "aws_route53_record" "mysql" {
     zone_id = var.zone_id
-    name = "mysql-${var.environmet}-${var.domain_name}"
+    name = "mysql-${var.environment}.${var.domain_name}"
     type = "CNAME"
     ttl = 2
-    records = "module.db.db_instance_address"
+    records = [module.db.db_instance_address]
+
+}

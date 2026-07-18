@@ -9,3 +9,9 @@ module "aws_vpc" {
     database_subnet_cidrs = var.database_subnet_cidrs
     is_peering_required = true
 }
+
+resource "aws_db_subnet_group" "expense" {
+    name = "${var.project}-${var.environment}"
+    subnet_ids = module.aws_vpc.database_subnet_ids
+  
+}

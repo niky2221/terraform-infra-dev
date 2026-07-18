@@ -120,7 +120,7 @@ resource "aws_security_group_rule" "vpn_alb" {
   from_port         = 80
   to_port           = 80
   protocol          = "tcp"
-  source security_group_id = module.vpn_sg.sg_id
+  source_security_group_id = module.vpn_sg.sg_id
   security_group_id = module.alb_sg.sg_id
 }
 # APP mysql accepting traffic from vpn
@@ -129,7 +129,7 @@ resource "aws_security_group_rule" "mysql_vpn" {
   from_port         = 3306
   to_port           = 3306
   protocol          = "tcp"
-  source security_group_id = module.vpn_sg.sg_id
+  source_security_group_id = module.vpn_sg.sg_id
   security_group_id = module.mysql_sg.sg_id
 }
 # APP mysql db connected through from bastion
@@ -138,6 +138,6 @@ resource "aws_security_group_rule" "mysql_bastion" {
   from_port         = 3306
   to_port           = 3306
   protocol          = "tcp"
-  source security_group_id = module.bastion_sg.sg_id
+  source_security_group_id = module.bastion_sg.sg_id
   security_group_id = module.mysql_sg.sg_id
 }

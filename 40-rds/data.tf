@@ -1,22 +1,4 @@
-data "aws_ami" "openvpn" {
-  most_recent      = true
-  owners           = ["679593333241"]
 
-  filter {
-    name   = "name"
-    values = ["OpenVPN Access Server 3.0.1"]
-  }
-
-  filter {
-    name   = "root-device-type"
-    values = ["ebs"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
 
 
 # output "ami_id" {

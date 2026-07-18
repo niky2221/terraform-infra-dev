@@ -12,7 +12,7 @@ variable "common_tags" {
     default = {
         project_name = "expense"
         environment = "dev"
-        description = "vpn network"
+        description = "mysql database"
     }
   
 }
@@ -23,4 +23,9 @@ variable "zone_id" {
 
 variable "domain_name" {
     default = "expense94.online"
+}
+
+variable "db_password" {
+    default = "ExpenseApp1"
+  
 }
