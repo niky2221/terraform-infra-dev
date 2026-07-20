@@ -16,7 +16,7 @@ resource "aws_instance" "backend" {
 resource "null_resource" "backend" {
   # Changes to any instance of the cluster requires re-provisioning
   triggers = {
-    instance_id = "aws_instance.backend.id"
+    instance_id = aws_instance.backend.id
   }
   
   # So we just choose the first in this case

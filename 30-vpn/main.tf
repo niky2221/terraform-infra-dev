@@ -9,6 +9,7 @@ resource "aws_instance" "vpn" {
   vpc_security_group_ids = [data.aws_ssm_parameter.vpn_sg_id.value]
   instance_type          = "t3.micro"
   subnet_id = local.public_subnet_id
+  user_data = file("userdata.sh")
   tags = merge(
     var.common_tags,
     {
