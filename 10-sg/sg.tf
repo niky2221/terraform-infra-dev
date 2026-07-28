@@ -28,6 +28,16 @@ module "frontend_sg" {
     common_tags = var.common_tags
 }
 
+module "web_alb_sg" {
+    source = "git::https://github.com/niky2221/terraform-sg_.git?ref=main"
+    project = var.project
+    environment = var.environment
+    sg_name  =  "web"
+    sg_description = "web instance security group"
+    vpc_id = data.aws_ssm_parameter.vpc_id.value
+    common_tags = var.common_tags
+}
+
 module "bastion_sg" {
     source = "git::https://github.com/niky2221/terraform-sg_.git?ref=main"
     project = var.project

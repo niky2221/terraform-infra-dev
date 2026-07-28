@@ -12,7 +12,7 @@ variable "common_tags" {
     default = {
         project_name = "expense"
         environment = "dev"
-        description = "backend"
+        description = "https certificate"
     }
   
 }
@@ -20,4 +20,8 @@ variable "common_tags" {
 variable "domain_name" {
     default = "expense94.online"
   
+}
+
+variable "zone_id" {
+    default = "Z05818272ZT7Y387ZB6VY"
 }

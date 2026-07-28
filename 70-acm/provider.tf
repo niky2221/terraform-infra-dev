@@ -7,7 +7,7 @@ terraform {
   }
   backend "s3" {
     bucket = "expense-tf-state"
-    key    = "expense-mysql-dev-key" #you shold unique key name in bucket, same key should not be used in repos or another any files
+    key    = "expense-acm-key" #you shold unique key name in bucket, same key should not be used in repos or another any files
     region = "us-east-1"
     dynamodb_table = "expense-tf-state-locking"
     use_lockfile = false

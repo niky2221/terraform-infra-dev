@@ -107,3 +107,77 @@ resource "aws_launch_template" "backend" {
     }
   }
 }
+
+resource "aws_autoscaling_group" "backend" {
+  name                      = local.resource_name
+  max_size                  = 10
+  min_size                  = 2
+  health_check_grace_period = 60
+  health_check_type         = "ELB"
+  desired_capacity          = 2
+  target_group_arns         = [aws_lb_target_group.backend.arn]
+  launch_template {
+    id      = aws_launch_template.backend.id
+    version = "$Latest"
+  }
+  vpc_zone_identifier       = local.private_subnet_ids
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 50
+    }
+    triggers = ["launch_template"]
+  }
+
+  tag {
+    key                 = "Name"
+    value               = "local.resource_name"
+    propagate_at_launch = true
+  }
+
+  timeouts {
+    delete = "5m"
+  }
+
+  tag {
+    key                 = "project"
+    value               = "expense"
+    propagate_at_launch = false
+  }
+  
+  tag {
+    key                 = "environment"
+    value               = "dev"
+    propagate_at_launch = false
+  }
+}
+
+resource "aws_autoscaling_policy" "backend" {
+  name                   = "local.resource_name"
+  policy_type            = "TargetTrackingScaling"
+  autoscaling_group_name = aws_autoscaling_group.backend.name
+
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+
+    target_value = 70.0
+  }
+}
+
+resource "aws_lb_listener_rule" "host_based_weighted_routing" {
+  listener_arn = data.aws_ssm_parameter.lb_listener_arn
+  priority     = 10
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.backend.arn
+  }
+
+  condition {
+    host_header {
+      values = ["backend.app-${var.environment}.${var.domain_name}"]
+    }
+  }
+}
