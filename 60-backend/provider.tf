@@ -10,7 +10,7 @@ terraform {
     key    = "expense-backend-key" #you shold unique key name in bucket, same key should not be used in repos or another any files
     region = "us-east-1"
     dynamodb_table = "expense-tf-state-locking"
-    use_lockfile = true
+    use_lockfile = false
   }
 }
 
