@@ -12,7 +12,7 @@ variable "common_tags" {
     default = {
         project_name = "expense"
         environment = "dev"
-        description = "https certificate"
+        description = "https_certificate"
     }
   
 }

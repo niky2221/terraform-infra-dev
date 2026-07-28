@@ -125,6 +125,15 @@ resource "aws_security_group_rule" "vpn_943" {
   security_group_id = module.vpn_sg.sg_id
 }
 
+resource "aws_security_group_rule" "web_alb_https" {
+  type              = "ingress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"] 
+  security_group_id = module.web_alb_sg.sg_id
+}
+
 resource "aws_security_group_rule" "vpn_alb" {
   type              = "ingress"
   from_port         = 80

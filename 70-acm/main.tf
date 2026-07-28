@@ -3,18 +3,17 @@ resource "aws_acm_certificate" "https" {
   validation_method = "DNS"
 
   tags = merge(
-    common_tags,
+    var.common_tags,
     {
         name = "${var.project}-${var.environment}"
     }
-  )
-    
+  )  
   }
 
 
 resource "aws_route53_record" "expense" {
   for_each = {
-    for dvo in aws_acm_certificate.example.domain_validation_options : dvo.domain_name => {
+    for dvo in aws_acm_certificate.https.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
@@ -31,5 +30,5 @@ resource "aws_route53_record" "expense" {
 
 resource "aws_acm_certificate_validation" "expense" {
   certificate_arn         = aws_acm_certificate.https.arn
-  validation_record_fqdns = [for record in aws_route53_record.example : record.fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.expense : record.fqdn]
 }

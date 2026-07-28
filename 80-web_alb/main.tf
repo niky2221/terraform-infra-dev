@@ -2,9 +2,9 @@ module "web_alb" {
   source = "terraform-aws-modules/alb/aws"
   internal = false
 
-  name    = "${var.project}-${var.environment}-web_alb"
+  name    = "${var.project}-${var.environment}-web-alb"
   vpc_id  = data.aws_ssm_parameter.vpc_id.value
-  subnets = local.public_subnet_id
+  subnets = local.public_subnet_ids
   create_security_group = false
   security_groups =  [data.aws_ssm_parameter.web_alb_sg_id.value]
   enable_deletion_protection = false
@@ -12,7 +12,7 @@ module "web_alb" {
   tags = merge(
     var.common_tags,
     {
-        Name = "${var.project}-${var.environment}-web_alb"
+        Name = "${var.project}-${var.environment}-web-alb"
     }
   )
 }
@@ -41,8 +41,8 @@ resource "aws_route53_record" "web_alb_record" {
   type    = "A"
 
   alias {
-    name                   = module.alb.dns_name
-    zone_id                = module.alb.zone_id # Use the same hosted zone ID
+    name                   = module.web_alb.dns_name
+    zone_id                = module.web_alb.zone_id # Use the same hosted zone ID
     evaluate_target_health = false
   }
 }
