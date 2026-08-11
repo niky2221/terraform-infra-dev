@@ -1,5 +1,5 @@
-# resource "aws_ssm_parameter" "lb_listener_arn" {
-#   name  = "/${var.project}/${var.environment}/lb_listener_arn"
-#   type  = "String"
-#   value = aws_lb_listener.http.arn
-# }
+resource "aws_ssm_parameter" "web_lb_listener_arn" {
+  name  = "/${var.project}/${var.environment}/web_lb_listener_arn"
+  type  = "String"
+  value = aws_lb_listener.https.arn
+}

@@ -171,6 +171,7 @@ resource "aws_security_group_rule" "backend_vpn" {
   security_group_id = module.backend_sg.sg_id
 }
 
+
 # APP backend accepting traffic from app_alb
 resource "aws_security_group_rule" "backend_app_alb" {
   type              = "ingress"
