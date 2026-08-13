@@ -49,7 +49,7 @@ resource "aws_ec2_instance_state" "frontend" {
 }
 
 resource "aws_ami_from_instance" "frontend" {
-  name               = local.resource_name
+  name               = "${local.resource_name}-frontend"
   source_instance_id = aws_instance.frontend.id
   depends_on = [aws_ec2_instance_state.frontend]
 }
@@ -69,7 +69,7 @@ resource "null_resource" "frontend_delete" {
 }
 
 resource "aws_lb_target_group" "frontend" {
-  name     = local.resource_name
+  name     = "${local.resource_name}-frontend"
   port     = 80
   protocol = "HTTP"
   vpc_id   = data.aws_ssm_parameter.vpc_id.value
@@ -88,7 +88,7 @@ resource "aws_lb_target_group" "frontend" {
 }
 
 resource "aws_launch_template" "frontend" {
-  name = local.resource_name
+  name = "${local.resource_name}-frontend"
 
   image_id = aws_ami_from_instance.frontend.id
 
@@ -103,13 +103,13 @@ resource "aws_launch_template" "frontend" {
     resource_type = "instance"
 
     tags = {
-      Name = local.resource_name
+      Name = "${local.resource_name}-frontend"
     }
   }
 }
 
 resource "aws_autoscaling_group" "frontend" {
-  name                      = local.resource_name
+  name                      = "${local.resource_name}-frontend"
   max_size                  = 10
   min_size                  = 2
   health_check_grace_period = 180
@@ -131,7 +131,7 @@ resource "aws_autoscaling_group" "frontend" {
 
   tag {
     key                 = "Name"
-    value               = local.resource_name
+    value               = "${local.resource_name}-frontend"
     propagate_at_launch = true
   }
 
