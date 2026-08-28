@@ -5,11 +5,12 @@ terraform {
       version = "6.49.0"
     }
   }
-  backend "s3" {
-    bucket = "expense-tf-state"
+ backend "s3" {
+    bucket = "expense-tf-statefile"
     key    = "expense-frontend-key" #you shold unique key name in bucket, same key should not be used in repos or another any files
     region = "us-east-1"
-    use_lockfile = "true"
+    dynamodb_table = "expense-tf-statelocking"
+    use_lockfile = false
   }
 }
 
